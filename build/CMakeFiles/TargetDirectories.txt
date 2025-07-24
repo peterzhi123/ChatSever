@@ -1,0 +1,7 @@
+/home/peter/desktop/ChatSever/build/CMakeFiles/edit_cache.dir
+/home/peter/desktop/ChatSever/build/CMakeFiles/rebuild_cache.dir
+/home/peter/desktop/ChatSever/build/src/CMakeFiles/edit_cache.dir
+/home/peter/desktop/ChatSever/build/src/CMakeFiles/rebuild_cache.dir
+/home/peter/desktop/ChatSever/build/src/server/CMakeFiles/ChatServer.dir
+/home/peter/desktop/ChatSever/build/src/server/CMakeFiles/edit_cache.dir
+/home/peter/desktop/ChatSever/build/src/server/CMakeFiles/rebuild_cache.dir
