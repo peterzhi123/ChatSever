@@ -1,8 +1,9 @@
 #include "ChatServer.hpp"
-
 #include <iostream>
 #include <functional>
-# include <string>
+#include <string>
+#include "../thirdparty/json.hpp"
+using json = nlohmann::json;
 using namespace std;
 
 ChatServer::ChatServer(EventLoop *loop,
@@ -42,6 +43,19 @@ void ChatServer::onMessage(const TcpConnectionPtr &conn,
                            Timestamp time)
 {
     string buff = buffer->retrieveAllAsString();
-    cout << "recv buff: " << buff << "  time: " << time.toFormattedString() << endl;
-    conn->send(buff);
+    // cout << "recv buff: " << buff << "  time: " << time.toFormattedString() << endl;
+    // conn->send(buff);
+    json js = json::parse(buff);
+
+    int msgid = js["magid"].get<int>();
+    msghandle handle = ChatService::getInstance()->GetHandle(msgid);
+
+    if (handle)
+    {
+        handle(conn, js);
+    }
+    else
+    {
+        std::cerr << "❌ 未找到对应消息处理函数，msgid = " << msgid << std::endl;
+    }
 }

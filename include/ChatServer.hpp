@@ -1,8 +1,9 @@
-#ifndef CHATSEVER_H
-#define CHATSEVER_H
+# ifndef CHATSEVER_H
+# define CHATSEVER_H
 
-#include <muduo/net/TcpServer.h>
-#include <muduo/net/EventLoop.h>
+# include <muduo/net/TcpServer.h>
+# include <muduo/net/EventLoop.h>
+# include "ChatService.hpp"
 using namespace muduo;
 using namespace muduo::net;
 
