@@ -178,6 +178,30 @@ ChatService.cpp.s:
 	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/ChatService.cpp.s
 .PHONY : ChatService.cpp.s
 
+db/MySQL.o: db/MySQL.cpp.o
+.PHONY : db/MySQL.o
+
+# target to build an object file
+db/MySQL.cpp.o:
+	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.o
+.PHONY : db/MySQL.cpp.o
+
+db/MySQL.i: db/MySQL.cpp.i
+.PHONY : db/MySQL.i
+
+# target to preprocess a source file
+db/MySQL.cpp.i:
+	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.i
+.PHONY : db/MySQL.cpp.i
+
+db/MySQL.s: db/MySQL.cpp.s
+.PHONY : db/MySQL.s
+
+# target to generate assembly for a file
+db/MySQL.cpp.s:
+	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.s
+.PHONY : db/MySQL.cpp.s
+
 main.o: main.cpp.o
 .PHONY : main.o
 
@@ -217,6 +241,9 @@ help:
 	@echo "... ChatService.o"
 	@echo "... ChatService.i"
 	@echo "... ChatService.s"
+	@echo "... db/MySQL.o"
+	@echo "... db/MySQL.i"
+	@echo "... db/MySQL.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

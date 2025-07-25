@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/peter/desktop/ChatSever/src/server/ChatServer.cpp" "src/server/CMakeFiles/ChatServer.dir/ChatServer.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/ChatServer.cpp.o.d"
   "/home/peter/desktop/ChatSever/src/server/ChatService.cpp" "src/server/CMakeFiles/ChatServer.dir/ChatService.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/ChatService.cpp.o.d"
+  "/home/peter/desktop/ChatSever/src/server/db/MySQL.cpp" "src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.o.d"
   "/home/peter/desktop/ChatSever/src/server/main.cpp" "src/server/CMakeFiles/ChatServer.dir/main.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/main.cpp.o.d"
   )
 
