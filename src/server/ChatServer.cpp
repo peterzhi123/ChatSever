@@ -47,7 +47,7 @@ void ChatServer::onMessage(const TcpConnectionPtr &conn,
     // conn->send(buff);
     json js = json::parse(buff);
 
-    int msgid = js["magid"].get<int>();
+    int msgid = js["msgid"].get<int>();
     msghandle handle = ChatService::getInstance()->GetHandle(msgid);
 
     if (handle)

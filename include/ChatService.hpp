@@ -5,6 +5,8 @@
 # include <functional>
 # include <unordered_map>
 # include "../thirdparty/json.hpp"
+# include "../../include/model/user.hpp"
+# include "../../include/model/userModel.hpp"
 
 #include <muduo/net/TcpServer.h>
 using namespace muduo;
@@ -29,6 +31,8 @@ private:
     ChatService();
 
     unordered_map<int, msghandle> _msghandleMap;
+
+    UserModel _userModel;
 };
 
 # endif

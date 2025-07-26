@@ -3,14 +3,19 @@
 using namespace std;
 int main(int argc, char **argv)
 {
+    char *ip;
+    uint16_t port;
+
     if (argc < 3)
     {
-        cout << "command invalid! example: ./ChatServer 127.0.0.1 6000" << endl;
-        exit(-1);
+        ip = (char *)"127.0.0.1"; // 默认IP
+        port = atoi("6000");      // 默认端口
     }
-
-    char *ip = argv[1];
-    uint16_t port = atoi(argv[2]);
+    else
+    {
+        ip = argv[1]; // 从命令行读取
+        port = atoi(argv[2]);
+    }
 
     EventLoop loop;
     InetAddress listenAddr(ip, port);

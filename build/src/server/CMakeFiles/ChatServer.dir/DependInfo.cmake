@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/peter/desktop/ChatSever/src/server/ChatService.cpp" "src/server/CMakeFiles/ChatServer.dir/ChatService.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/ChatService.cpp.o.d"
   "/home/peter/desktop/ChatSever/src/server/db/MySQL.cpp" "src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/db/MySQL.cpp.o.d"
   "/home/peter/desktop/ChatSever/src/server/main.cpp" "src/server/CMakeFiles/ChatServer.dir/main.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/main.cpp.o.d"
+  "/home/peter/desktop/ChatSever/src/server/model/userModel.cpp" "src/server/CMakeFiles/ChatServer.dir/model/userModel.cpp.o" "gcc" "src/server/CMakeFiles/ChatServer.dir/model/userModel.cpp.o.d"
   )
 
 # Targets to which this target links.

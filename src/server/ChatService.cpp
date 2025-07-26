@@ -1,5 +1,5 @@
-#include "../../include/ChatService.hpp"
-#include "../../include/public.hpp"
+# include "../../include/ChatService.hpp"
+# include "../../include/public.hpp"
 
 ChatService* ChatService::getInstance()
 {
@@ -25,5 +25,25 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
 
 void ChatService::registe(const TcpConnectionPtr &conn, json &js)
 {
-    cout << "这是注册" << endl;
+    User user;
+    user.setName(js["name"]);
+    user.setPwd(js["passwd"]);
+
+    if (_userModel.insert(user))
+    {
+        // 注册成功
+        json respond;
+        respond["magid"] = RSP_MSG;
+        respond["error"] = 0;
+        respond["id"] = user.getId();
+        conn->send(respond.dump());
+    }
+    else
+    {
+        // 注册失败
+        json respond;
+        respond["magid"] = RSP_MSG;
+        respond["error"] = 1;
+        conn->send(respond.dump());
+    }
 }

@@ -226,6 +226,30 @@ main.cpp.s:
 	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+model/userModel.o: model/userModel.cpp.o
+.PHONY : model/userModel.o
+
+# target to build an object file
+model/userModel.cpp.o:
+	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/model/userModel.cpp.o
+.PHONY : model/userModel.cpp.o
+
+model/userModel.i: model/userModel.cpp.i
+.PHONY : model/userModel.i
+
+# target to preprocess a source file
+model/userModel.cpp.i:
+	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/model/userModel.cpp.i
+.PHONY : model/userModel.cpp.i
+
+model/userModel.s: model/userModel.cpp.s
+.PHONY : model/userModel.s
+
+# target to generate assembly for a file
+model/userModel.cpp.s:
+	cd /home/peter/desktop/ChatSever/build && $(MAKE) $(MAKESILENT) -f src/server/CMakeFiles/ChatServer.dir/build.make src/server/CMakeFiles/ChatServer.dir/model/userModel.cpp.s
+.PHONY : model/userModel.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -247,6 +271,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... model/userModel.o"
+	@echo "... model/userModel.i"
+	@echo "... model/userModel.s"
 .PHONY : help
 
 

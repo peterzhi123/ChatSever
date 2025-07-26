@@ -4,7 +4,9 @@
 enum enMsgType
 {
     LOGIN_MSG = 1,
-    REGISTER_MSG
+    LOGIN_MSG_ACK,
+    REGISTER_MSG,
+    RSP_MSG,
 };
 
 # endif

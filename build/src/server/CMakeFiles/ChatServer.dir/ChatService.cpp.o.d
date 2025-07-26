@@ -227,9 +227,22 @@ src/server/CMakeFiles/ChatServer.dir/ChatService.cpp.o: \
  /usr/include/c++/11/bits/mask_array.h \
  /usr/include/c++/11/bits/indirect_array.h /usr/include/c++/11/cstring \
  /usr/include/string.h /usr/include/strings.h \
- /usr/include/muduo/net/TcpServer.h /usr/include/muduo/base/Atomic.h \
- /usr/include/muduo/base/noncopyable.h /usr/include/muduo/base/Types.h \
- /usr/include/muduo/net/TcpConnection.h \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/user.hpp \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/userModel.hpp \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/user.hpp \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/../db/MySQL.hpp \
+ /usr/include/mysql/mysql.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
+ /usr/include/mysql/field_types.h /usr/include/mysql/my_list.h \
+ /usr/include/mysql/mysql_com.h /usr/include/mysql/my_command.h \
+ /usr/include/mysql/my_compress.h \
+ /usr/include/mysql/udf_registration_types.h \
+ /usr/include/mysql/client_plugin.h /usr/include/c++/11/stdlib.h \
+ /usr/include/mysql/plugin_auth_common.h \
+ /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
+ /usr/include/mysql/errmsg.h /usr/include/muduo/net/TcpServer.h \
+ /usr/include/muduo/base/Atomic.h /usr/include/muduo/base/noncopyable.h \
+ /usr/include/muduo/base/Types.h /usr/include/muduo/net/TcpConnection.h \
  /usr/include/muduo/base/StringPiece.h /usr/include/muduo/net/Callbacks.h \
  /usr/include/muduo/base/Timestamp.h /usr/include/muduo/base/copyable.h \
  /usr/include/boost/operators.hpp /usr/include/boost/config.hpp \

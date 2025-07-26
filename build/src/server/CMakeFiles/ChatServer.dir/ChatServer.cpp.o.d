@@ -310,4 +310,18 @@ src/server/CMakeFiles/ChatServer.dir/ChatServer.cpp.o: \
  /usr/include/c++/11/bits/gslice_array.h \
  /usr/include/c++/11/bits/mask_array.h \
  /usr/include/c++/11/bits/indirect_array.h \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/user.hpp \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/userModel.hpp \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/user.hpp \
+ /home/peter/desktop/ChatSever/include/db/../../include/model/../db/MySQL.hpp \
+ /usr/include/mysql/mysql.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdbool.h \
+ /usr/include/mysql/field_types.h /usr/include/mysql/my_list.h \
+ /usr/include/mysql/mysql_com.h /usr/include/mysql/my_command.h \
+ /usr/include/mysql/my_compress.h \
+ /usr/include/mysql/udf_registration_types.h \
+ /usr/include/mysql/client_plugin.h /usr/include/c++/11/stdlib.h \
+ /usr/include/mysql/plugin_auth_common.h \
+ /usr/include/mysql/mysql_version.h /usr/include/mysql/mysql_time.h \
+ /usr/include/mysql/errmsg.h \
  /home/peter/desktop/ChatSever/include/../thirdparty/json.hpp

@@ -3,8 +3,8 @@
 
 static string server = "127.0.0.1";
 static string user = "root";
-static string password = "123456";
-static string dbname = "chat";
+static string password = "zyc123";
+static string dbname = "ChatDB";
 
 MySQL::MySQL()
 {
@@ -51,4 +51,9 @@ MYSQL_RES *MySQL::query(string sql)
         return nullptr;
     }
     return mysql_use_result(_conn);
+}
+
+MYSQL* MySQL::getConnection()
+{
+    return _conn;
 }
