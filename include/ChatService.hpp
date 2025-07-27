@@ -33,6 +33,8 @@ public:
 
     void oneChat(const TcpConnectionPtr &conn, json &js);
 
+    void reset();
+
 private:
     ChatService();
 

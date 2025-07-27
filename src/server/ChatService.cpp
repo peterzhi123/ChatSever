@@ -59,7 +59,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
                 // 读取该用户的离线消息后，把该用户的所有离线消息删除掉
                 _offlineMsgModel.remove(id);
             }
-            
+
             conn->send(respond.dump() + "\n");
         }
     }
@@ -140,4 +140,9 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js)
 
     // toid不在线，存储离线消息
     _offlineMsgModel.insert(toid, js.dump());
+}
+
+void ChatService::reset()
+{
+    _userModel.resetState();
 }
