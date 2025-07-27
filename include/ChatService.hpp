@@ -30,6 +30,8 @@ public:
 
     void clientCloseException(const TcpConnectionPtr &conn);
 
+    void oneChat(const TcpConnectionPtr &conn, json &js);
+
 private:
     ChatService();
 

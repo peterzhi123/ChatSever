@@ -10,7 +10,8 @@ ChatService *ChatService::getInstance()
 ChatService::ChatService()
 {
     _msghandleMap.insert({LOGIN_MSG, std::bind(&ChatService::login, this, _1, _2)});
-    _msghandleMap.insert({REGISTER_MSG, std::bind(&ChatService::registe, this, _1, _2)});
+    _msghandleMap.insert({REG_MSG, std::bind(&ChatService::registe, this, _1, _2)});
+    _msghandleMap.insert({ONE_CHAT_MSG, std::bind(&ChatService::oneChat, this, _1, _2)});
 }
 
 msghandle &ChatService::GetHandle(int msgType)
@@ -73,7 +74,7 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
     {
         // 注册成功
         json respond;
-        respond["magid"] = RSP_MSG;
+        respond["msgid"] = REG_MSG;
         respond["error"] = 0;
         respond["id"] = user.getId();
         conn->send(respond.dump() + "\n");
@@ -82,7 +83,7 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
     {
         // 注册失败
         json respond;
-        respond["magid"] = RSP_MSG;
+        respond["msgid"] = REG_MSG;
         respond["error"] = 1;
         conn->send(respond.dump() + "\n");
     }
@@ -111,4 +112,22 @@ void ChatService::clientCloseException(const TcpConnectionPtr &conn)
         user.setState("offline");
         _userModel.updateState(user);
     }
+}
+
+void ChatService::oneChat(const TcpConnectionPtr &conn, json &js)
+{
+    int toid = js["toid"].get<int>();
+
+    {
+        lock_guard<mutex> lock(_connMutex);
+        auto it = _userConnMap.find(toid);
+        if (it != _userConnMap.end())
+        {
+            // toid在线，转发消息   服务器主动推送消息给toid用户
+            it->second->send(js.dump() + "\n");
+            return;
+        }
+    }
+
+    // toid不在线，存储离线消息
 }
