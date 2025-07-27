@@ -51,6 +51,15 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
             respond["msqid"] = LOGIN_MSG_ACK;
             respond["error"] = 0;
             respond["msg"] = "登录成功!";
+
+            vector<string> vec = _offlineMsgModel.query(id);
+            if (!vec.empty())
+            {
+                respond["offlinemsg"] = vec;
+                // 读取该用户的离线消息后，把该用户的所有离线消息删除掉
+                _offlineMsgModel.remove(id);
+            }
+            
             conn->send(respond.dump() + "\n");
         }
     }
@@ -130,4 +139,5 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js)
     }
 
     // toid不在线，存储离线消息
+    _offlineMsgModel.insert(toid, js.dump());
 }

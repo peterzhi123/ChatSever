@@ -6,8 +6,9 @@
 # include <unordered_map>
 # include <mutex>
 # include "../thirdparty/json.hpp"
-# include "../../include/model/user.hpp"
-# include "../../include/model/userModel.hpp"
+# include "../model/userModel.hpp"
+# include "../include/model/userModel.hpp"
+# include "../include/model/offlinemessagemodel.hpp"
 
 #include <muduo/net/TcpServer.h>
 using namespace muduo;
@@ -38,7 +39,10 @@ private:
     unordered_map<int, msghandle> _msghandleMap;
 
     UserModel _userModel;
+    OfflineMsgModel _offlineMsgModel;
+    
     unordered_map<int, TcpConnectionPtr> _userConnMap;
+
     mutex _connMutex;
 };
 
