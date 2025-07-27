@@ -9,6 +9,7 @@
 # include "../model/userModel.hpp"
 # include "../include/model/userModel.hpp"
 # include "../include/model/offlinemessagemodel.hpp"
+# include "../include/model/friendmodel.hpp"
 
 #include <muduo/net/TcpServer.h>
 using namespace muduo;
@@ -35,6 +36,8 @@ public:
 
     void reset();
 
+    void addFriend(const TcpConnectionPtr &conn, json &js);
+
 private:
     ChatService();
 
@@ -42,6 +45,7 @@ private:
 
     UserModel _userModel;
     OfflineMsgModel _offlineMsgModel;
+    FriendModel _friendModel;
     
     unordered_map<int, TcpConnectionPtr> _userConnMap;
 
