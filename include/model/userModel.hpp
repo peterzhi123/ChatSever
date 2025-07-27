@@ -14,7 +14,7 @@ public:
 
     User query(int id);
 
-    bool update(User &user);
+    bool updateState(User &user);
 };
 
 # endif

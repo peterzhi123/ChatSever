@@ -28,6 +28,8 @@ public:
 
     void registe(const TcpConnectionPtr &conn, json &js);
 
+    void clientCloseException(const TcpConnectionPtr &conn);
+
 private:
     ChatService();
 

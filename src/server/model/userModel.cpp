@@ -49,7 +49,7 @@ User UserModel::query(int id)
     return User();
 }
 
-bool UserModel::update(User &user)
+bool UserModel::updateState(User &user)
 {
     char sql[1024] = {0};
     sprintf(sql, "UPDATE User SET state = '%s' WHERE id = %d;", user.getState().c_str(), user.getId());

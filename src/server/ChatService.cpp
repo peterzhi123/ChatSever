@@ -1,7 +1,7 @@
-# include "../../include/ChatService.hpp"
-# include "../../include/public.hpp"
+#include "../../include/ChatService.hpp"
+#include "../../include/public.hpp"
 
-ChatService* ChatService::getInstance()
+ChatService *ChatService::getInstance()
 {
     static ChatService service;
     return &service;
@@ -13,7 +13,7 @@ ChatService::ChatService()
     _msghandleMap.insert({REGISTER_MSG, std::bind(&ChatService::registe, this, _1, _2)});
 }
 
-msghandle& ChatService::GetHandle(int msgType)
+msghandle &ChatService::GetHandle(int msgType)
 {
     return _msghandleMap[msgType];
 }
@@ -34,7 +34,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
             respond["msqid"] = LOGIN_MSG_ACK;
             respond["error"] = 2;
             respond["msg"] = "这个账户已登录!";
-            conn->send(respond.dump());
+            conn->send(respond.dump() + "\n");
         }
         else
         {
@@ -44,13 +44,13 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
             }
 
             user.setState("online");
-            _userModel.update(user);
+            _userModel.updateState(user);
 
             json respond;
             respond["msqid"] = LOGIN_MSG_ACK;
             respond["error"] = 0;
             respond["msg"] = "登录成功!";
-            conn->send(respond.dump());
+            conn->send(respond.dump() + "\n");
         }
     }
     else
@@ -59,7 +59,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
         respond["msqid"] = LOGIN_MSG_ACK;
         respond["error"] = 1;
         respond["msg"] = "登录失败。密码错误或者用户不存在!";
-        conn->send(respond.dump());
+        conn->send(respond.dump() + "\n");
     }
 }
 
@@ -76,7 +76,7 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
         respond["magid"] = RSP_MSG;
         respond["error"] = 0;
         respond["id"] = user.getId();
-        conn->send(respond.dump());
+        conn->send(respond.dump() + "\n");
     }
     else
     {
@@ -84,6 +84,31 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
         json respond;
         respond["magid"] = RSP_MSG;
         respond["error"] = 1;
-        conn->send(respond.dump());
+        conn->send(respond.dump() + "\n");
+    }
+}
+
+void ChatService::clientCloseException(const TcpConnectionPtr &conn)
+{
+    User user;
+    {
+        lock_guard<mutex> lock(_connMutex);
+        for (auto it = _userConnMap.begin(); it != _userConnMap.end(); ++it)
+        {
+            if (it->second == conn)
+            {
+                // 从map表删除用户的链接信息
+                user.setId(it->first);
+                _userConnMap.erase(it);
+                break;
+            }
+        }
+    }
+
+    // 更新用户的状态信息
+    if (user.getId() != -1)
+    {
+        user.setState("offline");
+        _userModel.updateState(user);
     }
 }
