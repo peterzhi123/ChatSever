@@ -10,6 +10,8 @@
 # include "../include/model/userModel.hpp"
 # include "../include/model/offlinemessagemodel.hpp"
 # include "../include/model/friendmodel.hpp"
+# include "../include/model/group.hpp"
+# include "../include/model/groupmodel.hpp"
 
 #include <muduo/net/TcpServer.h>
 using namespace muduo;
@@ -38,6 +40,15 @@ public:
 
     void addFriend(const TcpConnectionPtr &conn, json &js);
 
+    // 创建群组业务
+    void createGroup(const TcpConnectionPtr &conn, json &js);
+
+    // 加入群组业务
+    void addGroup(const TcpConnectionPtr &conn, json &js);
+
+    // 群组聊天业务
+    void groupChat(const TcpConnectionPtr &conn, json &js);
+
 private:
     ChatService();
 
@@ -46,6 +57,7 @@ private:
     UserModel _userModel;
     OfflineMsgModel _offlineMsgModel;
     FriendModel _friendModel;
+    GroupModel _groupModel;
     
     unordered_map<int, TcpConnectionPtr> _userConnMap;
 

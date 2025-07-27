@@ -56,6 +56,16 @@
         "variant": "cpp",
         "forward_list": "cpp",
         "valarray": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "ctime": "cpp",
+        "chrono": "cpp",
+        "codecvt": "cpp",
+        "condition_variable": "cpp",
+        "ratio": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp"
     }
 }
