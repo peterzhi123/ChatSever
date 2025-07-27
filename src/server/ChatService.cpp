@@ -20,7 +20,47 @@ msghandle& ChatService::GetHandle(int msgType)
 
 void ChatService::login(const TcpConnectionPtr &conn, json &js)
 {
-    cout << "这是登录" << endl;
+    // 获取json登录信息
+    int id = js["id"].get<int>();
+    string passwd = js["passwd"];
+
+    // 登录验证
+    User user = _userModel.query(id);
+    if (user.getId() == id && user.getPwd() == passwd)
+    {
+        if (user.getState() == "online")
+        {
+            json respond;
+            respond["msqid"] = LOGIN_MSG_ACK;
+            respond["error"] = 2;
+            respond["msg"] = "这个账户已登录!";
+            conn->send(respond.dump());
+        }
+        else
+        {
+            {
+                lock_guard<mutex> lock(_connMutex);
+                _userConnMap.insert({user.getId(), conn});
+            }
+
+            user.setState("online");
+            _userModel.update(user);
+
+            json respond;
+            respond["msqid"] = LOGIN_MSG_ACK;
+            respond["error"] = 0;
+            respond["msg"] = "登录成功!";
+            conn->send(respond.dump());
+        }
+    }
+    else
+    {
+        json respond;
+        respond["msqid"] = LOGIN_MSG_ACK;
+        respond["error"] = 1;
+        respond["msg"] = "登录失败。密码错误或者用户不存在!";
+        conn->send(respond.dump());
+    }
 }
 
 void ChatService::registe(const TcpConnectionPtr &conn, json &js)

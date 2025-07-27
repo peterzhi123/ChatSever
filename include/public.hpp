@@ -7,6 +7,7 @@ enum enMsgType
     LOGIN_MSG_ACK,
     REGISTER_MSG,
     RSP_MSG,
+    LOGINOUT_MSG,
 };
 
 # endif

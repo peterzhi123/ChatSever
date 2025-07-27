@@ -55,6 +55,7 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "forward_list": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "mutex": "cpp"
     }
 }

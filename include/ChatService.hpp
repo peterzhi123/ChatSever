@@ -4,6 +4,7 @@
 # include <iostream>
 # include <functional>
 # include <unordered_map>
+# include <mutex>
 # include "../thirdparty/json.hpp"
 # include "../../include/model/user.hpp"
 # include "../../include/model/userModel.hpp"
@@ -33,6 +34,8 @@ private:
     unordered_map<int, msghandle> _msghandleMap;
 
     UserModel _userModel;
+    unordered_map<int, TcpConnectionPtr> _userConnMap;
+    mutex _connMutex;
 };
 
 # endif
