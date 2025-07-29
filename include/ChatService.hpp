@@ -28,16 +28,22 @@ public:
 
     msghandle& GetHandle(int msgType);
 
+    // 登录业务
     void login(const TcpConnectionPtr &conn, json &js);
 
+    // 注册业务
     void registe(const TcpConnectionPtr &conn, json &js);
 
+    // 客户端异常退出时需要执行的逻辑
     void clientCloseException(const TcpConnectionPtr &conn);
 
+    // 点对点聊天业务
     void oneChat(const TcpConnectionPtr &conn, json &js);
 
+    // 服务器重启业务逻辑
     void reset();
 
+    // 添加好友业务
     void addFriend(const TcpConnectionPtr &conn, json &js);
 
     // 创建群组业务
@@ -48,6 +54,9 @@ public:
 
     // 群组聊天业务
     void groupChat(const TcpConnectionPtr &conn, json &js);
+
+    // 登出业务
+    void loginout(const TcpConnectionPtr &conn, json &js);
 
 private:
     ChatService();

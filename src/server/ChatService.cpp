@@ -16,6 +16,7 @@ ChatService::ChatService()
     _msghandleMap.insert({CREATE_GROUP_MSG, std::bind(&ChatService::createGroup, this, _1, _2)});
     _msghandleMap.insert({ADD_GROUP_MSG, std::bind(&ChatService::addGroup, this, _1, _2)});
     _msghandleMap.insert({GROUP_CHAT_MSG, std::bind(&ChatService::groupChat, this, _1, _2)});
+    _msghandleMap.insert({LOGINOUT_MSG, std::bind(&ChatService::loginout, this, _1, _2)});
 }
 
 msghandle &ChatService::GetHandle(int msgType)
@@ -80,6 +81,34 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
                 respond["friends"] = vec2;
             }
 
+            // 查询用户的群组信息
+            vector<Group> groupuserVec = _groupModel.queryGroups(id);
+            if (!groupuserVec.empty())
+            {
+                // group:[{groupid:[xxx, xxx, xxx, xxx]}]
+                vector<string> groupV;
+                for (Group &group : groupuserVec)
+                {
+                    json grpjson;
+                    grpjson["id"] = group.getId();
+                    grpjson["groupname"] = group.getName();
+                    grpjson["groupdesc"] = group.getDesc();
+                    vector<string> userV;
+                    for (GroupUser &user : group.getUsers())
+                    {
+                        json js;
+                        js["id"] = user.getId();
+                        js["name"] = user.getName();
+                        js["state"] = user.getState();
+                        js["role"] = user.getRole();
+                        userV.push_back(js.dump());
+                    }
+                    grpjson["users"] = userV;
+                    groupV.push_back(grpjson.dump());
+                }
+                respond["groups"] = groupV;
+            }
+
             conn->send(respond.dump() + "\n");
         }
     }
@@ -115,6 +144,25 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
         respond["msgid"] = REG_MSG;
         respond["error"] = 1;
         conn->send(respond.dump() + "\n");
+    }
+}
+
+void ChatService::loginout(const TcpConnectionPtr &conn, json &js)
+{
+    int userid = js["id"].get<int>();
+    User user;
+    {
+        lock_guard<mutex> lock(_connMutex);
+
+        auto it = _userConnMap.find(userid);
+        if (it != _userConnMap.end())
+        {
+             _userConnMap.erase(it);
+        }
+
+        user.setId(userid);
+        user.setState("offline");
+        _userModel.updateState(user);
     }
 }
 
