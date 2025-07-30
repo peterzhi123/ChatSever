@@ -12,6 +12,7 @@
 # include "../include/model/friendmodel.hpp"
 # include "../include/model/group.hpp"
 # include "../include/model/groupmodel.hpp"
+# include "../include/redis/redis.hpp"
 
 #include <muduo/net/TcpServer.h>
 using namespace muduo;
@@ -58,6 +59,9 @@ public:
     // 登出业务
     void loginout(const TcpConnectionPtr &conn, json &js);
 
+    // 从redis消息队列中获取订阅的消息
+    void handleRedisSubscribeMessage(int, string);
+
 private:
     ChatService();
 
@@ -71,6 +75,7 @@ private:
     unordered_map<int, TcpConnectionPtr> _userConnMap;
 
     mutex _connMutex;
+    Redis _redis;
 };
 
 # endif

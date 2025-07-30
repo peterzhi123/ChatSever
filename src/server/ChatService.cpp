@@ -17,6 +17,11 @@ ChatService::ChatService()
     _msghandleMap.insert({ADD_GROUP_MSG, std::bind(&ChatService::addGroup, this, _1, _2)});
     _msghandleMap.insert({GROUP_CHAT_MSG, std::bind(&ChatService::groupChat, this, _1, _2)});
     _msghandleMap.insert({LOGINOUT_MSG, std::bind(&ChatService::loginout, this, _1, _2)});
+
+    if (_redis.connect())
+    {
+        _redis.init_notify_handler(std::bind(&ChatService::handleRedisSubscribeMessage, this, _1, _2));
+    }
 }
 
 msghandle &ChatService::GetHandle(int msgType)
@@ -28,7 +33,7 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
 {
     // 获取json登录信息
     int id = js["id"].get<int>();
-    string passwd = js["passwd"];
+    string passwd = js["password"];
 
     // 登录验证
     User user = _userModel.query(id);
@@ -37,9 +42,9 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
         if (user.getState() == "online")
         {
             json respond;
-            respond["msqid"] = LOGIN_MSG_ACK;
-            respond["error"] = 2;
-            respond["msg"] = "这个账户已登录!";
+            respond["msgid"] = LOGIN_MSG_ACK;
+            respond["errno"] = 2;
+            respond["errmsg"] = "这个账户已登录!";
             conn->send(respond.dump() + "\n");
         }
         else
@@ -53,8 +58,10 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
             _userModel.updateState(user);
 
             json respond;
-            respond["msqid"] = LOGIN_MSG_ACK;
-            respond["error"] = 0;
+            respond["msgid"] = LOGIN_MSG_ACK;
+            respond["errno"] = 0;
+            respond["id"] = id;
+            respond["name"] = user.getName();
             respond["msg"] = "登录成功!";
 
             vector<string> vec = _offlineMsgModel.query(id);
@@ -110,14 +117,16 @@ void ChatService::login(const TcpConnectionPtr &conn, json &js)
             }
 
             conn->send(respond.dump() + "\n");
+            
+            _redis.subscribe(id);
         }
     }
     else
     {
         json respond;
-        respond["msqid"] = LOGIN_MSG_ACK;
-        respond["error"] = 1;
-        respond["msg"] = "登录失败。密码错误或者用户不存在!";
+        respond["msgid"] = LOGIN_MSG_ACK;
+        respond["errno"] = 1;
+        respond["errmsg"] = "登录失败。密码错误或者用户不存在!";
         conn->send(respond.dump() + "\n");
     }
 }
@@ -126,14 +135,14 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
 {
     User user;
     user.setName(js["name"]);
-    user.setPwd(js["passwd"]);
+    user.setPwd(js["password"]);
 
     if (_userModel.insert(user))
     {
         // 注册成功
         json respond;
-        respond["msgid"] = REG_MSG;
-        respond["error"] = 0;
+        respond["msgid"] = REG_MSG_ACK;
+        respond["errno"] = 0;
         respond["id"] = user.getId();
         conn->send(respond.dump() + "\n");
     }
@@ -141,8 +150,8 @@ void ChatService::registe(const TcpConnectionPtr &conn, json &js)
     {
         // 注册失败
         json respond;
-        respond["msgid"] = REG_MSG;
-        respond["error"] = 1;
+        respond["msgid"] = REG_MSG_ACK;
+        respond["errno"] = 1;
         conn->send(respond.dump() + "\n");
     }
 }
@@ -164,6 +173,9 @@ void ChatService::loginout(const TcpConnectionPtr &conn, json &js)
         user.setState("offline");
         _userModel.updateState(user);
     }
+
+    // 用户注销，相当于就是下线，在redis中取消订阅通道
+    _redis.unsubscribe(userid); 
 }
 
 void ChatService::clientCloseException(const TcpConnectionPtr &conn)
@@ -182,6 +194,9 @@ void ChatService::clientCloseException(const TcpConnectionPtr &conn)
             }
         }
     }
+
+    // 用户注销，相当于就是下线，在redis中取消订阅通道
+    _redis.unsubscribe(user.getId()); 
 
     // 更新用户的状态信息
     if (user.getId() != -1)
@@ -204,10 +219,20 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js)
             it->second->send(js.dump() + "\n");
             return;
         }
+        else
+        {
+            User toUser = _userModel.query(toid);
+            if (toUser.getState() == "online")
+            {
+                _redis.publish(toUser.getId(), js.dump());
+            }
+            else
+            {
+                // toid不在线，存储离线消息
+                _offlineMsgModel.insert(toid, js.dump());
+            }
+        }
     }
-
-    // toid不在线，存储离线消息
-    _offlineMsgModel.insert(toid, js.dump());
 }
 
 void ChatService::reset()
@@ -217,24 +242,26 @@ void ChatService::reset()
 
 void ChatService::addFriend(const TcpConnectionPtr &conn, json &js)
 {
-     int userid = js["id"].get<int>();
+    int userid = js["id"].get<int>();
     int friendid = js["friendid"].get<int>();
 
+    _friendModel.insert(userid, friendid);
+
     // 存储好友信息
-    if (_friendModel.insert(userid, friendid))
-    {
-        json respond;
-        respond["error"] = 0;
-        respond["msg"] = "添加好友成功!";
-        conn->send(respond.dump() + "\n");
-    }
-    else
-    {
-        json respond;
-        respond["error"] = 1;
-        respond["msg"] = "添加好友失败!";
-        conn->send(respond.dump() + "\n");
-    }
+    // if (_friendModel.insert(userid, friendid))
+    // {
+    //     json respond;
+    //     respond["error"] = 0;
+    //     respond["msg"] = "添加好友成功!";
+    //     conn->send(respond.dump() + "\n");
+    // }
+    // else
+    // {
+    //     json respond;
+    //     respond["error"] = 1;
+    //     respond["msg"] = "添加好友失败!";
+    //     conn->send(respond.dump() + "\n");
+    // }
 }
 
 // 创建群组业务
@@ -279,8 +306,30 @@ void ChatService::groupChat(const TcpConnectionPtr &conn, json &js)
         }
         else
         {
-            // 存储离线群消息
-            _offlineMsgModel.insert(id, js.dump());
+            User toUser = _userModel.query(id);
+            if (toUser.getState() == "online")
+            {
+                _redis.publish(toUser.getId(), js.dump());
+            }
+            else
+            {
+                // toid不在线，存储离线消息
+                _offlineMsgModel.insert(id, js.dump());
+            }
         }
     }
+}
+
+void ChatService::handleRedisSubscribeMessage(int userid, string msg)
+{
+    lock_guard<mutex> lock(_connMutex);
+    auto it = _userConnMap.find(userid);
+    if (it != _userConnMap.end())
+    {
+        it->second->send(msg);
+        return;
+    }
+
+    // 存储该用户的离线消息
+    _offlineMsgModel.insert(userid, msg);
 }
